@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+    <style>
+      #cnv {
+        border: 2px solid black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      let fr = 35;
+      var g = 1.55;
+      var vel = 0;
+      var y = 549;
+      var count = 0;
+      var progress = 1;
+      var obstaclepos = 0;
+
+      var obstacle = {
+        color: 'blue',
+        speed: 10,
+        width: 50
+      };
+
+      function setup() {
+        var cnv = createCanvas(1400, 680);
+        background('#a3bbe0');
+        stroke('black');
+        strokeWeight(5);
+        line(0, 600, 1400, 600);
+        strokeWeight(3);
+        fill('#d6afc3');
+        rect(50, y, 50, 50);
+
+      }
+
+      function obst(color, speed, width) {
+        this.color = color;
+        this.speed = speed;
+        this.width = width;
+      }
+
+      function draw() {
+        count++;
+
+        if (count > 160) {
+          createObstacle();
+          progress += 0.05;
+          count = 0;
+          obstaclepos = 0;
+        }
+
+        if (y <= 549 && vel != 0) {
+          vel += g;
+          y += vel;
+        } else if (y >= 549) {
+          vel = 0;
+          y = 549;
+        }
+        y = Math.min(549, y);
+
+        obstaclepos += obstacle.speed;
+
+        clear();
+        background('#a3bbe0');
+        stroke('black');
+        strokeWeight(5);
+        line(0, 600, 1400, 600);
+
+        fill('gold');
+        rect(0, 600, 1400, 80);
+
+        strokeWeight(3);
+        fill('#d6afc3');
+        rect(150, y, 50, 50);
+
+        strokeWeight(4);
+        fill(obstacle.color);
+        rect(1400-obstaclepos, 540, obstacle.width, 60);
+
+        frameRate(fr);
+
+      }
+
+      window.onkeydown = function(e) {
+		   var key = e.keyCode ? e.keyCode : e.which;
+
+		   if (key == 32 && y >= 549) {
+			   vel = -22;
+       }
+     }
+
+     function createObstacle() {
+       let color = randomcolor();
+       let speed = 13 * progress;
+       let width = 70 + Math.floor(Math.random() * 40);
+
+       obstacle = new obst(color, speed, width);
+     }
+
+     function randomcolor() {
+       var decider = Math.floor(Math.random() * 3);
+       if (decider == 0) {
+         return 'blue';
+       } else if (decider == 1) {
+         return 'green';
+       } else if (decider == 2) {
+         return 'red';
+       }
+     }
+
+    </script>
+  </body>
+
+</html>
